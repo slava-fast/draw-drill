@@ -218,10 +218,12 @@
     const results = document.getElementById("results");
     const pickButton = document.getElementById("pickButton");
     const pickButtonLabel = document.getElementById("pickButtonLabel");
+    const weaknessButton = document.getElementById("weaknessButton");
     const levelButtons = [...document.querySelectorAll(".level-button")];
     const countButtons = [...document.querySelectorAll(".count-button")];
     const levelStorageKey = "practice-picker-selected-levels";
     const countStorageKey = "practice-picker-drill-count";
+    const weaknessStorageKey = "practice-picker-weakness-mode";
 
     function readStoredLevels() {
       try {
@@ -263,7 +265,8 @@
 
     function updatePickButtonLabel() {
       const count = selectedDrillCount();
-      pickButtonLabel.textContent = `Pick ${count} ${drillWord(count)}`;
+      const modePrefix = weaknessModeEnabled() ? "Pick weak" : "Pick";
+      pickButtonLabel.textContent = `${modePrefix} ${count} ${drillWord(count)}`;
     }
 
     function setDrillCount(count) {
@@ -283,18 +286,53 @@
       setDrillCount(storedCount);
     }
 
+    function weaknessModeEnabled() {
+      return weaknessButton.getAttribute("aria-pressed") === "true";
+    }
+
+    function setWeaknessMode(enabled) {
+      weaknessButton.setAttribute("aria-pressed", String(enabled));
+      pickButton.dataset.mode = enabled ? "weakness" : "random";
+      storage.set(weaknessStorageKey, String(enabled));
+      updatePickButtonLabel();
+    }
+
+    function restoreWeaknessMode() {
+      setWeaknessMode(storage.get(weaknessStorageKey) === "true");
+    }
+
     function activePracticeItems() {
       const levels = selectedLevels();
       return practiceItems.filter(exercise => levels.includes(exercise.level));
     }
 
-    function pickDrills() {
-      const pool = [...activePracticeItems()];
+    function shuffleItems(items) {
+      const pool = [...items];
       for (let i = pool.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [pool[i], pool[j]] = [pool[j], pool[i]];
       }
-      return pool.slice(0, Math.min(selectedDrillCount(), pool.length));
+      return pool;
+    }
+
+    function pickWeaknessDrills(pool) {
+      const stats = readDrillStats();
+      const groupedByCount = pool.reduce((groups, exercise) => {
+        const count = stats[exercise.title] || 0;
+        if (!groups.has(count)) groups.set(count, []);
+        groups.get(count).push(exercise);
+        return groups;
+      }, new Map());
+
+      return [...groupedByCount.keys()]
+        .sort((first, second) => first - second)
+        .flatMap(count => shuffleItems(groupedByCount.get(count)));
+    }
+
+    function pickDrills() {
+      const pool = activePracticeItems();
+      const orderedPool = weaknessModeEnabled() ? pickWeaknessDrills(pool) : shuffleItems(pool);
+      return orderedPool.slice(0, Math.min(selectedDrillCount(), orderedPool.length));
     }
 
     function renderEmptyState() {
@@ -669,6 +707,10 @@
       });
     });
 
+    weaknessButton.addEventListener("click", () => {
+      setWeaknessMode(!weaknessModeEnabled());
+    });
+
     habitGrid.addEventListener("click", event => {
       const dayButton = event.target.closest(".habit-day[data-editable=\"true\"]");
       if (!dayButton) return;
@@ -676,6 +718,7 @@
     });
 
     restoreSelectedLevels();
+    restoreWeaknessMode();
     restoreDrillCount();
     const initialStreak = effectiveStreak();
     renderStreak(initialStreak);

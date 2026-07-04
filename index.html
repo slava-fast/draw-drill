@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Draw Drill</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <meta name="theme-color" content="#f6fbff" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body class="app">
@@ -69,6 +71,30 @@
               <button class="count-button" type="button" data-count="5" aria-pressed="false">5</button>
               <button class="count-button" type="button" data-count="6" aria-pressed="false">6</button>
             </div>
+          </div>
+
+          <div class="control-section">
+            <span class="control-label">Picker mode</span>
+            <button id="weaknessButton" class="mode-button" type="button" aria-pressed="false">
+              <span class="mode-icon" aria-hidden="true">
+                <svg class="mode-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19h16"/>
+                  <path d="M7 16v-5"/>
+                  <path d="M12 16V7"/>
+                  <path d="M17 16v-2"/>
+                  <path d="M5 5c5 6 9 6 14 0"/>
+                </svg>
+              </span>
+              <span class="mode-content">
+                <span class="mode-title">Weakness mode</span>
+                <span class="mode-description">Prioritize your least-practiced drills.</span>
+              </span>
+              <span class="mode-status" aria-hidden="true">
+                <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 6 9 17l-5-5"/>
+                </svg>
+              </span>
+            </button>
           </div>
 
           <button id="pickButton" class="primary-button" type="button">
