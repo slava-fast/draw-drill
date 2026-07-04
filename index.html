@@ -42,66 +42,68 @@
 
     <section class="studio-layout" aria-labelledby="page-title">
       <aside class="control-deck">
-        <section class="intro-panel">
-          <p class="intro-kicker">Daily fundamentals</p>
-          <h1 class="intro-title" id="page-title">What are we practicing today?</h1>
-          <p class="intro-description">Tune the levels, choose your workload, and generate a session that gives your hands and eyes a useful job to do.</p>
-        </section>
+        <div class="control-card">
+          <section class="intro-panel">
+            <p class="intro-kicker">Daily fundamentals</p>
+            <h1 class="intro-title" id="page-title">What are we practicing today?</h1>
+            <p class="intro-description">Tune the levels, choose your workload, and generate a session that gives your hands and eyes a useful job to do.</p>
+          </section>
 
-        <section class="control-panel" aria-label="Practice controls">
-          <div class="control-section">
-            <span class="control-label">Focus levels</span>
-            <div class="level-stack" aria-label="Exercise level filter">
-              <button class="level-button" type="button" data-level="Level 1" aria-pressed="true">Level 1</button>
-              <button class="level-button" type="button" data-level="Level 2" aria-pressed="true">Level 2</button>
-              <button class="level-button" type="button" data-level="Level 3" aria-pressed="true">Level 3</button>
-              <button class="level-button" type="button" data-level="Level 4" aria-pressed="true">Level 4</button>
+          <section class="control-panel" aria-label="Practice controls">
+            <div class="control-section">
+              <span class="control-label">Focus levels</span>
+              <div class="level-stack" aria-label="Exercise level filter">
+                <button class="level-button" type="button" data-level="Level 1" aria-pressed="true">Level 1</button>
+                <button class="level-button" type="button" data-level="Level 2" aria-pressed="true">Level 2</button>
+                <button class="level-button" type="button" data-level="Level 3" aria-pressed="true">Level 3</button>
+                <button class="level-button" type="button" data-level="Level 4" aria-pressed="true">Level 4</button>
+              </div>
             </div>
-          </div>
 
-          <div class="control-section">
-            <span class="control-label">Drills in this session</span>
-            <div class="count-strip" aria-label="Number of drills to pick">
-              <button class="count-button" type="button" data-count="1" aria-pressed="false">1</button>
-              <button class="count-button" type="button" data-count="2" aria-pressed="false">2</button>
-              <button class="count-button" type="button" data-count="3" aria-pressed="true">3</button>
-              <button class="count-button" type="button" data-count="4" aria-pressed="false">4</button>
-              <button class="count-button" type="button" data-count="5" aria-pressed="false">5</button>
-              <button class="count-button" type="button" data-count="6" aria-pressed="false">6</button>
+            <div class="control-section">
+              <span class="control-label">Drills in this session</span>
+              <div class="count-strip" aria-label="Number of drills to pick">
+                <button class="count-button" type="button" data-count="1" aria-pressed="false">1</button>
+                <button class="count-button" type="button" data-count="2" aria-pressed="false">2</button>
+                <button class="count-button" type="button" data-count="3" aria-pressed="true">3</button>
+                <button class="count-button" type="button" data-count="4" aria-pressed="false">4</button>
+                <button class="count-button" type="button" data-count="5" aria-pressed="false">5</button>
+                <button class="count-button" type="button" data-count="6" aria-pressed="false">6</button>
+              </div>
             </div>
-          </div>
 
-          <div class="control-section">
-            <span class="control-label">Picker mode</span>
-            <button id="weaknessButton" class="mode-button" type="button" aria-pressed="false">
-              <span class="mode-icon" aria-hidden="true">
-                <svg class="mode-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 19h16"/>
-                  <path d="M7 16v-5"/>
-                  <path d="M12 16V7"/>
-                  <path d="M17 16v-2"/>
-                  <path d="M5 5c5 6 9 6 14 0"/>
-                </svg>
-              </span>
-              <span class="mode-content">
-                <span class="mode-title">Weakness mode</span>
-                <span class="mode-description">Prioritize your least-practiced drills.</span>
-              </span>
-              <span class="mode-status" aria-hidden="true">
-                <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20 6 9 17l-5-5"/>
-                </svg>
-              </span>
+            <div class="control-section">
+              <span class="control-label">Picker mode</span>
+              <button id="weaknessButton" class="mode-button" type="button" aria-pressed="false">
+                <span class="mode-icon" aria-hidden="true">
+                  <svg class="mode-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19h16"/>
+                    <path d="M7 16v-5"/>
+                    <path d="M12 16V7"/>
+                    <path d="M17 16v-2"/>
+                    <path d="M5 5c5 6 9 6 14 0"/>
+                  </svg>
+                </span>
+                <span class="mode-content">
+                  <span class="mode-title">Weakness mode</span>
+                  <span class="mode-description">Prioritize your least-practiced drills.</span>
+                </span>
+                <span class="mode-status" aria-hidden="true">
+                  <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 6 9 17l-5-5"/>
+                  </svg>
+                </span>
+              </button>
+            </div>
+
+            <button id="pickButton" class="primary-button" type="button">
+              <svg class="primary-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/>
+              </svg>
+              <span id="pickButtonLabel">Pick 3 drills</span>
             </button>
-          </div>
-
-          <button id="pickButton" class="primary-button" type="button">
-            <svg class="primary-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/>
-            </svg>
-            <span id="pickButtonLabel">Pick 3 drills</span>
-          </button>
-        </section>
+          </section>
+        </div>
 
         <section class="session-panel" id="sessionPanel" data-running="false" hidden>
           <div class="session-meta">
@@ -128,7 +130,6 @@
             <h2 class="workspace-title">Session board</h2>
             <p class="workspace-description">Your selected drills land here as a small practice plan.</p>
           </div>
-          <span class="workspace-badge">Today</span>
         </div>
 
         <div id="results" class="empty-state">
