@@ -424,6 +424,13 @@
       return stats;
     }
 
+    function adjustDrillStat(title, delta) {
+      const stats = readDrillStats();
+      stats[title] = Math.max(0, (stats[title] || 0) + delta);
+      writeDrillStats(stats);
+      renderDrillStats(stats);
+    }
+
     function renderDrillStats(stats = readDrillStats()) {
       const rows = practiceItems
         .map((exercise, order) => ({ title: exercise.title, count: stats[exercise.title] || 0, order }))
@@ -437,7 +444,11 @@
         return `
           <article class="stat-row">
             <span class="stat-name">${row.title}</span>
-            <span class="stat-count">${row.count}</span>
+            <span class="stat-controls" aria-label="${row.title} completions">
+              <button class="stat-button" type="button" data-stat-action="decrease" data-stat-title="${row.title}" aria-label="Decrease ${row.title} completions" ${row.count === 0 ? "disabled" : ""}>-</button>
+              <span class="stat-count" aria-label="${row.count} completions">${row.count}</span>
+              <button class="stat-button" type="button" data-stat-action="increase" data-stat-title="${row.title}" aria-label="Increase ${row.title} completions">+</button>
+            </span>
             <span class="stat-meter" aria-hidden="true">
               <span class="stat-meter-fill" style="--stat-percent: ${percent}%"></span>
             </span>
@@ -544,15 +555,20 @@
       return todayKey(new Date(year, 0, dayIndex));
     }
 
+    function mondayFirstWeekdayIndex(date) {
+      return (date.getDay() + 6) % 7;
+    }
+
     function renderHabitYear(streak) {
       const practicedDays = new Set(streak.days.filter(day => day.startsWith(`${habitYear}-`)));
       const today = todayKey();
       const currentYear = Number(today.slice(0, 4));
       const firstDay = new Date(habitYear, 0, 1);
+      const firstDayOffset = mondayFirstWeekdayIndex(firstDay);
       const yearLength = new Date(habitYear, 1, 29).getMonth() === 1 ? 366 : 365;
       const cells = [];
 
-      for (let blank = 0; blank < firstDay.getDay(); blank++) {
+      for (let blank = 0; blank < firstDayOffset; blank++) {
         cells.push('<span class="habit-day" data-state="blank" aria-hidden="true"></span>');
       }
 
@@ -709,6 +725,13 @@
 
     weaknessButton.addEventListener("click", () => {
       setWeaknessMode(!weaknessModeEnabled());
+    });
+
+    statsList.addEventListener("click", event => {
+      const statButton = event.target.closest(".stat-button");
+      if (!statButton) return;
+      const delta = statButton.dataset.statAction === "increase" ? 1 : -1;
+      adjustDrillStat(statButton.dataset.statTitle, delta);
     });
 
     habitGrid.addEventListener("click", event => {
