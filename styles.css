@@ -160,6 +160,7 @@
     }
 
     .streak-number {
+      margin-right: -3px;
       color: var(--text);
       font-size: 1.42rem;
       font-weight: 900;
