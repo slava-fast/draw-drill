@@ -1,0 +1,797 @@
+﻿<!doctype html>
+<html lang="en" class="document">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>What are we practicing today?</title>
+  <style>
+    .document {
+      color-scheme: dark;
+    }
+
+    .page {
+      --bg: #0b0d10;
+      --panel: rgba(255, 255, 255, 0.075);
+      --panel-strong: rgba(255, 255, 255, 0.13);
+      --text: #f7f1e8;
+      --muted: rgba(247, 241, 232, 0.68);
+      --line: rgba(255, 255, 255, 0.16);
+      --gold: #f0c75e;
+      --mint: #74e0ba;
+      --coral: #ff8664;
+      --cyan: #7fd6ff;
+      --shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
+      --radius: 8px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      box-sizing: border-box;
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 12%, rgba(255, 134, 100, 0.25), transparent 34%),
+        radial-gradient(circle at 82% 18%, rgba(127, 214, 255, 0.22), transparent 32%),
+        radial-gradient(circle at 55% 88%, rgba(116, 224, 186, 0.20), transparent 34%),
+        linear-gradient(135deg, #111015 0%, #0b1015 48%, #15120d 100%);
+      overflow-x: hidden;
+    }
+
+    .page::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.28;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(to bottom, black, transparent 84%);
+    }
+
+    .page-shell {
+      box-sizing: border-box;
+      width: min(1120px, calc(100% - 32px));
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 42px 0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 28px;
+    }
+
+    .page-header {
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .header-brand {
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .header-mark {
+      box-sizing: border-box;
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
+    }
+
+    .header-mark-icon {
+      width: 22px;
+      height: 22px;
+    }
+
+    .hero {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 28px;
+    }
+
+    .hero-intro {
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .hero-title {
+      box-sizing: border-box;
+      margin: 40px auto 30px;
+      font-size: 4rem;
+    }
+
+    .hero-description {
+      box-sizing: border-box;
+      max-width: 740px;
+      margin: 22px 0 12px;
+      margin-inline: auto;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.8vw, 1.18rem);
+      line-height: 1.7;
+    }
+
+    .practice-controls {
+      box-sizing: border-box;
+      width: min(820px, 100%);
+      margin: 26px auto 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(9, 12, 15, 0.42);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    }
+
+    .level-filter {
+      box-sizing: border-box;
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 0;
+    }
+
+    .level-filter-button {
+      box-sizing: border-box;
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      cursor: pointer;
+      font: inherit;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.08);
+      min-height: 42px;
+      padding: 0 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+      transition: transform 180ms;
+    }
+
+    .level-filter-button:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.26);
+    }
+
+    .level-filter-button[aria-pressed="true"] {
+      color: #17110a;
+      border-color: rgba(240, 199, 94, 0.68);
+      background: linear-gradient(135deg, #ffe49a, var(--gold));
+    }
+
+    .hero-actions {
+      box-sizing: border-box;
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+
+    .picker-button {
+      box-sizing: border-box;
+      appearance: none;
+      border: 0;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font: inherit;
+      color: #17110a;
+      background: linear-gradient(135deg, #ffe49a, var(--gold));
+      min-height: 54px;
+      padding: 0 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      box-shadow: 0 18px 44px rgba(240, 199, 94, 0.23), inset 0 1px 0 rgba(255,255,255,0.45);
+      transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+    }
+
+    .picker-button:hover { transform: translateY(-2px); filter: brightness(1.03); }
+    .picker-button:active { transform: translateY(0); }
+
+    .picker-button-icon {
+      width: 20px;
+      height: 20px;
+      flex: 0 0 auto;
+    }
+
+    .results-stage {
+      box-sizing: border-box;
+      position: relative;
+      min-height: 430px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.045));
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.14);
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .results-stage::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, transparent 0 44%, rgba(255,255,255,0.08) 44% 45%, transparent 45% 100%),
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.18), transparent 40%);
+      z-index: -1;
+    }
+
+    .results-grid {
+      box-sizing: border-box;
+      height: 100%;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .practice-card {
+      box-sizing: border-box;
+      position: relative;
+      min-height: 380px;
+      display: grid;
+      grid-template-rows: 132px auto;
+      align-items: start;
+      gap: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      background: rgba(9, 12, 15, 0.56);
+      overflow: hidden;
+      transform: translateY(14px) scale(0.98);
+      opacity: 0;
+      animation: reveal 520ms cubic-bezier(.2,.9,.18,1) forwards;
+    }
+
+    .practice-card:nth-child(2) { animation-delay: 95ms; }
+    .practice-card:nth-child(3) { animation-delay: 190ms; }
+
+    @keyframes reveal {
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    .practice-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.075), transparent);
+      transform: translateX(-100%);
+      animation: sweep 900ms ease forwards;
+      animation-delay: inherit;
+      pointer-events: none;
+    }
+
+    @keyframes sweep { to { transform: translateX(100%); } }
+
+    .card-art {
+      box-sizing: border-box;
+      height: 132px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.06);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .card-art-icon {
+      width: 116px;
+      height: 116px;
+      filter: drop-shadow(0 20px 22px rgba(0,0,0,0.24));
+    }
+
+    .card-meta {
+      box-sizing: border-box;
+      text-align: left;
+    }
+
+    .card-eyebrow {
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--gold);
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+      font-size: 0.72rem;
+    }
+
+    .card-level {
+      box-sizing: border-box;
+      color: #17110a;
+      background: var(--gold);
+      border-radius: 999px;
+      padding: 5px 8px;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .card-time {
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .card-title {
+      box-sizing: border-box;
+      margin: 0;
+      font-size: clamp(1.35rem, 2.6vw, 2rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .card-description {
+      box-sizing: border-box;
+      margin: 12px 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .card-focus {
+      color: rgba(247, 241, 232, 0.86);
+      font-weight: 700;
+    }
+
+    .card-drill {
+      box-sizing: border-box;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: rgba(247, 241, 232, 0.76);
+      line-height: 1.5;
+    }
+
+    .card-drill-label {
+      color: var(--text);
+    }
+
+    .placeholder {
+      box-sizing: border-box;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 34px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .placeholder-illustration {
+      width: min(320px, 76vw);
+      height: auto;
+      margin-bottom: 22px;
+      opacity: 0.92;
+    }
+
+    .placeholder-title {
+      display: block;
+      color: var(--text);
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+    }
+
+    .placeholder-description {
+      color: var(--muted);
+    }
+
+    @media (max-width: 860px) {
+      .page-shell { padding: 26px 0; }
+      .page-header { align-items: flex-start; }
+      .practice-controls {
+        align-items: stretch;
+        flex-direction: column;
+      }
+      .level-filter { justify-content: center; }
+      .results-stage { min-height: 0; }
+      .results-grid { grid-template-columns: 1fr; }
+      .practice-card {
+        min-height: 160px;
+        grid-template-columns: 146px 1fr;
+        grid-template-rows: none;
+        align-items: center;
+        text-align: left;
+      }
+      .card-meta {
+        text-align: left;
+      }
+      .hero-title { font-size: clamp(2.8rem, 15vw, 5.1rem); }
+    }
+
+    @media (max-width: 560px) {
+      .page-shell { width: min(100% - 22px, 1120px); }
+      .page-header { flex-direction: column; }
+      .practice-controls { padding: 10px; }
+      .level-filter { justify-content: stretch; }
+      .level-filter-button { flex: 1 1 calc(50% - 10px); }
+      .hero-actions { align-items: stretch; }
+      .picker-button { width: 100%; justify-content: center; }
+      .results-grid { padding: 12px; gap: 12px; }
+      .practice-card {
+        min-height: 0;
+        grid-template-columns: 88px 1fr;
+        gap: 13px;
+        padding: 12px;
+      }
+      .card-art { height: 88px; }
+      .card-art-icon { width: 78px; height: 78px; }
+      .card-eyebrow { font-size: 0.64rem; margin-bottom: 5px; }
+      .card-time { display: none; }
+      .card-drill { display: none; }
+    }
+  </style>
+</head>
+<body class="page">
+  <main class="page-shell">
+    <header class="page-header">
+      <div class="header-brand" aria-label="Practice picker">
+        <span class="header-mark" aria-hidden="true">
+          <svg class="header-mark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v18M3 12h18"/><path d="m7 7 10 10M17 7 7 17"/>
+          </svg>
+        </span>
+        Draw Drill
+      </div>
+    </header>
+
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-intro">
+        <h1 id="page-title" class="hero-title">What are we practicing today?</h1>
+        <p class="hero-description">Pick three targeted fundamentals drills from the full 20-exercise practice ladder: hand control, observation, 3D construction, and form manipulation.</p>
+        <div class="practice-controls">
+          <div class="level-filter" aria-label="Exercise level filter">
+            <button class="level-filter-button" type="button" data-level="Level 1" aria-pressed="true">Level 1</button>
+            <button class="level-filter-button" type="button" data-level="Level 2" aria-pressed="true">Level 2</button>
+            <button class="level-filter-button" type="button" data-level="Level 3" aria-pressed="true">Level 3</button>
+            <button class="level-filter-button" type="button" data-level="Level 4" aria-pressed="true">Level 4</button>
+          </div>
+          <div class="hero-actions">
+            <button id="pickButton" class="picker-button" type="button">
+              <svg class="picker-button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/>
+              </svg>
+              Pick 3 prompts
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-stage" aria-live="polite">
+        <div id="results" class="placeholder">
+          <div class="placeholder-content">
+            <svg class="placeholder-illustration" viewBox="0 0 420 260" fill="none" aria-hidden="true">
+              <path d="M83 188c47-93 182-110 254-30" stroke="#f0c75e" stroke-width="10" stroke-linecap="round" opacity=".85"/>
+              <rect x="64" y="82" width="96" height="96" rx="8" fill="#74e0ba" opacity=".9"/>
+              <path d="M232 75 333 45l26 91-100 30-27-91Z" fill="#7fd6ff" opacity=".88"/>
+              <circle cx="184" cy="154" r="62" fill="#ff8664" opacity=".88"/>
+              <path d="M116 119c35-25 76-25 123 0" stroke="#fff7e8" stroke-width="8" stroke-linecap="round" opacity=".88"/>
+              <path d="M283 72v96M235 120h96" stroke="#101317" stroke-width="7" stroke-linecap="round" opacity=".58"/>
+            </svg>
+            <strong class="placeholder-title">Ready when you are.</strong>
+            <span class="placeholder-description">Your three practice cards will appear here.</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    const practiceItems = [
+      {
+        title: "Writing Warm-up",
+        level: "Level 1",
+        time: "5-10 min",
+        type: "lines",
+        focus: "Fine motor control and clean pen movement.",
+        drill: "Write the alphabet, your name, and a few random sentences slowly enough to stay clean, then faster while keeping control."
+      },
+      {
+        title: "Line Stacks",
+        level: "Level 1",
+        time: "10 min",
+        type: "lines",
+        focus: "Straight, curved, confident one-stroke lines.",
+        drill: "Fill rows with parallel straight lines, then curved lines. Keep spacing even and draw each stroke in one committed motion."
+      },
+      {
+        title: "Circles and Ellipses",
+        level: "Level 1",
+        time: "10 min",
+        type: "circles",
+        focus: "Roundness, rotation, and ellipse accuracy.",
+        drill: "Visualize the circle first, draw it in one motion, then rotate it into ellipses at different angles."
+      },
+      {
+        title: "Rotating Squares",
+        level: "Level 1",
+        time: "10 min",
+        type: "boxes",
+        focus: "Boxes in different orientations.",
+        drill: "Draw a square, mark its center with an X, then redraw it gradually rotated until you complete a 180-degree turn."
+      },
+      {
+        title: "Ribbons",
+        level: "Level 1",
+        time: "10-15 min",
+        type: "ribbon",
+        focus: "Flowing 3D forms with believable volume.",
+        drill: "Draw a flowing line, duplicate it with an offset, then connect the sides so the ribbon twists through space."
+      },
+      {
+        title: "Shape Extrusion",
+        level: "Level 1",
+        time: "10-15 min",
+        type: "extrude",
+        focus: "Turning flat shapes into chunky 3D forms.",
+        drill: "Draw any simple 2D shape or letter, then add depth and connect the corners to make it feel solid."
+      },
+      {
+        title: "Symmetry",
+        level: "Level 2",
+        time: "10 min",
+        type: "mirror",
+        focus: "Accurate mirrored curves and straights.",
+        drill: "Draw an irregular shape on one side of a center line, then mirror it on the other side as closely as possible."
+      },
+      {
+        title: "Shape Matching",
+        level: "Level 2",
+        time: "10 min",
+        type: "shapes",
+        focus: "Observation and proportion matching.",
+        drill: "Draw any random shape, then duplicate it next to the original. Compare angles, spacing, and silhouette."
+      },
+      {
+        title: "Silhouettes",
+        level: "Level 2",
+        time: "10-15 min",
+        type: "silhouette",
+        focus: "Readable outer shape without internal detail.",
+        drill: "Use a reference and draw only the outline of a character, animal, vehicle, or object. No interior lines."
+      },
+      {
+        title: "Symmetry in Perspective",
+        level: "Level 2",
+        time: "15 min",
+        type: "perspective",
+        focus: "Mirrored design inside foreshortened space.",
+        drill: "Draw a square in perspective, then place a symmetrical design inside it so both halves match the perspective."
+      },
+      {
+        title: "Cylinder Rotations",
+        level: "Level 3",
+        time: "15 min",
+        type: "cylinder",
+        focus: "Ellipse changes across views.",
+        drill: "Draw the same cylinder from top, side, three-quarter, and foreshortened angles. Watch how the ellipses open and close."
+      },
+      {
+        title: "Boxes on a Horizon",
+        level: "Level 3",
+        time: "15 min",
+        type: "boxes",
+        focus: "Perspective boxes tied to one horizon.",
+        drill: "Place a horizon line, then draw boxes at different positions and angles while keeping them related to that horizon."
+      },
+      {
+        title: "Boxes Without Horizon",
+        level: "Level 3",
+        time: "15 min",
+        type: "boxes",
+        focus: "Perspective from imagination.",
+        drill: "Draw boxes at different orientations first, then add the horizon afterward to check how consistent your perspective was."
+      },
+      {
+        title: "Box Storage Room",
+        level: "Level 3",
+        time: "15-20 min",
+        type: "boxes",
+        focus: "Multiple objects relating in 3D space.",
+        drill: "Stack boxes beside, behind, and on top of each other. Make overlaps, scale, and perspective feel convincing."
+      },
+      {
+        title: "Box Slicing",
+        level: "Level 4",
+        time: "15 min",
+        type: "slice",
+        focus: "Cutting forms with angled planes.",
+        drill: "Draw a box and slice pieces off at different angles. Show the new cut face clearly."
+      },
+      {
+        title: "Box Extrusion",
+        level: "Level 4",
+        time: "15 min",
+        type: "extrude",
+        focus: "Growing complexity from simple forms.",
+        drill: "Pick one face of a box and pull it outward into a new volume. Keep the extension aligned in perspective."
+      },
+      {
+        title: "Volume Bending",
+        level: "Level 4",
+        time: "15 min",
+        type: "bend",
+        focus: "Bending boxes or cylinders without losing solidity.",
+        drill: "Take a straight cylinder or box and bend it into a curved form while keeping the cross-sections believable."
+      },
+      {
+        title: "Beveling",
+        level: "Level 4",
+        time: "15 min",
+        type: "bevel",
+        focus: "Softening hard edges into rounded forms.",
+        drill: "Take boxes, cylinders, or mixed forms and bevel some or all of their edges so they feel rounded and dimensional."
+      },
+      {
+        title: "3D Blobs",
+        level: "Level 4",
+        time: "15 min",
+        type: "blob",
+        focus: "Organic masses that still feel solid.",
+        drill: "Draw freeform cloud, rock, or creature-like masses. Use contour, overlap, and light logic to make them feel 3D."
+      },
+      {
+        title: "Construct a Real Object",
+        level: "Level 4",
+        time: "20 min",
+        type: "construct",
+        focus: "Combining boxes, cylinders, slices, bevels, and blobs.",
+        drill: "Choose a car, animal, furniture piece, or tool and build it from the forms practiced in the earlier exercises."
+      }
+    ];
+
+    const palettes = [
+      ["#74e0ba", "#f0c75e", "#101317"],
+      ["#7fd6ff", "#ff8664", "#101317"],
+      ["#f0c75e", "#ff8664", "#101317"],
+      ["#f7f1e8", "#74e0ba", "#101317"],
+      ["#ff8664", "#7fd6ff", "#101317"]
+    ];
+
+    function artForExercise(exercise, colors) {
+      const templates = {
+        lines: `<path d="M16 34c24-18 49 17 88-5" stroke="${colors[0]}" stroke-width="8" stroke-linecap="round" fill="none"/><path d="M16 58h88" stroke="${colors[1]}" stroke-width="8" stroke-linecap="round"/><path d="M16 82c24-8 49 8 88-5" stroke="#f7f1e8" stroke-width="8" stroke-linecap="round" fill="none"/>`,
+        circles: `<circle cx="45" cy="57" r="28" fill="${colors[0]}"/><ellipse cx="78" cy="67" rx="31" ry="14" fill="${colors[1]}"/><path d="M23 25c23-13 53-10 75 8" stroke="#f7f1e8" stroke-width="6" stroke-linecap="round" fill="none"/>`,
+        boxes: `<path d="M25 44 60 24l35 20-35 20z" fill="${colors[1]}"/><path d="M25 44v39l35 21V64z" fill="${colors[0]}"/><path d="M95 44v39l-35 21V64z" fill="#f7f1e8" opacity=".9"/><path d="M25 44 60 64l35-20M60 64v40" stroke="${colors[2]}" stroke-width="4" opacity=".5"/>`,
+        ribbon: `<path d="M19 40c30-32 43 28 82 2" stroke="${colors[0]}" stroke-width="16" stroke-linecap="round" fill="none"/><path d="M19 72c30-32 43 28 82 2" stroke="${colors[1]}" stroke-width="16" stroke-linecap="round" fill="none"/><path d="M20 40c22 17 18 51 0 32M101 42c-20 17-18 49 0 32" stroke="#f7f1e8" stroke-width="5" stroke-linecap="round" fill="none"/>`,
+        extrude: `<path d="M28 42 62 23l35 19v39L62 101 28 81z" fill="${colors[0]}"/><path d="M62 23v39l35-20" fill="${colors[1]}" opacity=".86"/><path d="M62 62v39M28 42l34 20 35-20" stroke="${colors[2]}" stroke-width="4" opacity=".45"/>`,
+        mirror: `<path d="M58 17v86" stroke="#f7f1e8" stroke-width="5" stroke-dasharray="7 8" opacity=".85"/><path d="M51 28c-22 8-31 26-22 44 5 10 16 18 22 21z" fill="${colors[0]}"/><path d="M65 28c22 8 31 26 22 44-5 10-16 18-22 21z" fill="${colors[1]}"/>`,
+        shapes: `<rect x="17" y="48" width="42" height="42" rx="7" fill="${colors[0]}"/><path d="M71 30h31v31H71z" fill="${colors[1]}"/><path d="M69 70h35l-18 31z" fill="#f7f1e8" opacity=".94"/>`,
+        silhouette: `<path d="M40 97c-8-17 4-26 2-40-2-20 12-36 30-29 19 7 25 29 13 45 12 3 15 14 8 24z" fill="${colors[0]}"/><circle cx="54" cy="31" r="13" fill="${colors[1]}"/><path d="M34 96h62" stroke="#f7f1e8" stroke-width="6" stroke-linecap="round" opacity=".8"/>`,
+        perspective: `<path d="M22 38 98 22v76L22 82z" fill="${colors[0]}" opacity=".92"/><path d="M60 30v60M22 60h76" stroke="#f7f1e8" stroke-width="5" stroke-linecap="round" opacity=".85"/><path d="M44 50c-12 9-12 20 0 29M76 43c12 8 12 29 0 37" stroke="${colors[2]}" stroke-width="5" stroke-linecap="round" fill="none" opacity=".48"/>`,
+        cylinder: `<path d="M28 39c0-12 64-12 64 0v43c0 13-64 13-64 0z" fill="${colors[0]}"/><ellipse cx="60" cy="39" rx="32" ry="12" fill="${colors[1]}"/><path d="M28 82c0 13 64 13 64 0" stroke="#f7f1e8" stroke-width="5" opacity=".8" fill="none"/><path d="M38 39v43M82 39v43" stroke="${colors[2]}" stroke-width="4" opacity=".38"/>`,
+        slice: `<path d="M24 42 62 23l36 21-36 21z" fill="${colors[1]}"/><path d="M24 42v42l38 20V65z" fill="${colors[0]}"/><path d="M98 44 82 76 62 104V65z" fill="#f7f1e8" opacity=".9"/><path d="M45 53 87 35M45 53l17 52" stroke="${colors[2]}" stroke-width="5" opacity=".5"/>`,
+        bend: `<path d="M25 82c11-43 46-61 70-45 13 9 11 28-3 34-18 8-35 3-48 24" stroke="${colors[0]}" stroke-width="23" stroke-linecap="round" fill="none"/><path d="M27 81c18 12 31 17 47 16" stroke="${colors[1]}" stroke-width="7" stroke-linecap="round" fill="none"/>`,
+        bevel: `<path d="M31 43 61 26l31 17v34L61 94 31 77z" fill="${colors[0]}"/><path d="M43 48 61 38l19 10v22L61 81 43 70z" fill="${colors[1]}"/><path d="M31 43 61 61l31-18M61 61v33" stroke="#f7f1e8" stroke-width="4" opacity=".65"/>`,
+        blob: `<path d="M37 88c-17-11-14-37 4-42 2-22 33-28 45-10 21-2 29 27 13 40 5 18-21 33-38 19-8 6-17 4-24-7z" fill="${colors[0]}"/><path d="M39 58c13-12 31-18 50-10" stroke="${colors[1]}" stroke-width="7" stroke-linecap="round" opacity=".9" fill="none"/>`,
+        construct: `<path d="M18 72h61l14 16H31z" fill="${colors[0]}"/><path d="M35 49h35l20 23H18z" fill="${colors[1]}"/><circle cx="39" cy="90" r="9" fill="#f7f1e8"/><circle cx="77" cy="90" r="9" fill="#f7f1e8"/><path d="M30 72h60" stroke="${colors[2]}" stroke-width="5" opacity=".45"/>`
+      };
+
+      return `
+        <svg class="card-art-icon" viewBox="0 0 120 120" role="img" aria-label="${exercise.title}">
+          ${templates[exercise.type] || templates.shapes}
+        </svg>`;
+    }
+
+    const results = document.getElementById("results");
+    const button = document.getElementById("pickButton");
+    const levelButtons = [...document.querySelectorAll(".level-filter-button")];
+    const levelStorageKey = "practice-picker-selected-levels";
+
+    function readStoredLevels() {
+      try {
+        const storedLevels = JSON.parse(localStorage.getItem(levelStorageKey));
+        if (!Array.isArray(storedLevels)) return null;
+        return storedLevels.filter(level => typeof level === "string");
+      } catch {
+        return null;
+      }
+    }
+
+    function storeSelectedLevels() {
+      localStorage.setItem(levelStorageKey, JSON.stringify(selectedLevels()));
+    }
+
+    function restoreSelectedLevels() {
+      const storedLevels = readStoredLevels();
+      if (!storedLevels) return;
+
+      levelButtons.forEach(levelButton => {
+        levelButton.setAttribute("aria-pressed", String(storedLevels.includes(levelButton.dataset.level)));
+      });
+    }
+
+    function selectedLevels() {
+      return levelButtons
+        .filter(levelButton => levelButton.getAttribute("aria-pressed") === "true")
+        .map(levelButton => levelButton.dataset.level);
+    }
+
+    function activePracticeItems() {
+      const levels = selectedLevels();
+      return practiceItems.filter(exercise => levels.includes(exercise.level));
+    }
+
+    function pickThree() {
+      const shuffled = [...activePracticeItems()].sort(() => Math.random() - 0.5);
+      return shuffled.slice(0, Math.min(3, shuffled.length));
+    }
+
+    function renderEmptyState() {
+      results.className = "placeholder";
+      results.innerHTML = `
+        <div class="placeholder-content">
+          <svg class="placeholder-illustration" viewBox="0 0 420 260" fill="none" aria-hidden="true">
+            <path d="M78 86h264" stroke="#f0c75e" stroke-width="10" stroke-linecap="round" opacity=".85"/>
+            <path d="M112 132h196" stroke="#74e0ba" stroke-width="10" stroke-linecap="round" opacity=".85"/>
+            <path d="M154 178h112" stroke="#7fd6ff" stroke-width="10" stroke-linecap="round" opacity=".85"/>
+            <circle cx="100" cy="86" r="18" fill="#ff8664" opacity=".9"/>
+            <circle cx="320" cy="178" r="18" fill="#f7f1e8" opacity=".9"/>
+          </svg>
+          <strong class="placeholder-title">Choose at least one level.</strong>
+          <span class="placeholder-description">The picker will use only the checked levels.</span>
+        </div>`;
+    }
+
+    function render() {
+      const picks = pickThree();
+      if (picks.length === 0) {
+        renderEmptyState();
+        return;
+      }
+
+      results.className = "results-grid";
+      results.innerHTML = picks.map((exercise, index) => {
+        const colors = palettes[index % palettes.length];
+        const image = artForExercise(exercise, colors);
+        return `
+          <article class="practice-card">
+            <div class="card-art">${image}</div>
+            <div class="card-meta">
+              <div class="card-eyebrow">
+                <span class="card-level">${exercise.level}</span>
+                <span class="card-time">${exercise.time}</span>
+              </div>
+              <h2 class="card-title">${exercise.title}</h2>
+              <p class="card-description card-focus">${exercise.focus}</p>
+              <div class="card-drill"><strong class="card-drill-label">Do this:</strong> ${exercise.drill}</div>
+            </div>
+          </article>`;
+      }).join("");
+    }
+
+    button.addEventListener("click", render);
+    levelButtons.forEach(levelButton => {
+      levelButton.addEventListener("click", () => {
+        const isPressed = levelButton.getAttribute("aria-pressed") === "true";
+        levelButton.setAttribute("aria-pressed", String(!isPressed));
+        storeSelectedLevels();
+      });
+    });
+    restoreSelectedLevels();
+  </script>
+</body>
+</html>
