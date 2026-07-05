@@ -920,8 +920,58 @@
     .stats-list {
       box-sizing: border-box;
       display: grid;
+      gap: 16px;
+    }
+
+    .stat-level-group {
+      box-sizing: border-box;
+      border: 1px solid rgba(22, 32, 45, 0.12);
+      border-radius: var(--radius);
+      padding: 14px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.78), rgba(255,255,255,0.48)),
+        rgba(17, 138, 178, 0.04);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.86);
+    }
+
+    .stat-level-head {
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .stat-level-title {
+      box-sizing: border-box;
+      margin: 0;
+      color: var(--text);
+      font-size: 0.92rem;
+      font-weight: 950;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .stat-level-total {
+      box-sizing: border-box;
+      border: 1px solid rgba(17, 138, 178, 0.16);
+      border-radius: 999px;
+      padding: 6px 9px;
+      color: #0d6f7f;
+      background: rgba(17, 138, 178, 0.08);
+      font-size: 0.72rem;
+      font-weight: 950;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .stat-level-list {
+      box-sizing: border-box;
+      display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
+      gap: 8px;
     }
 
     .stat-row {
@@ -934,7 +984,7 @@
       border: 1px solid var(--line);
       border-radius: var(--radius);
       padding: 10px 12px;
-      background: rgba(255,255,255,0.66);
+      background: rgba(255,255,255,0.72);
     }
 
     .stat-name {
@@ -1087,7 +1137,7 @@
       .drill-board {
         grid-template-columns: 1fr;
       }
-      .stats-list {
+      .stat-level-list {
         grid-template-columns: 1fr;
       }
       .habit-legend {

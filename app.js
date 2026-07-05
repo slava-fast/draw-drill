@@ -432,27 +432,48 @@
     }
 
     function renderDrillStats(stats = readDrillStats()) {
+      const levels = ["Level 1", "Level 2", "Level 3", "Level 4"];
       const rows = practiceItems
-        .map((exercise, order) => ({ title: exercise.title, count: stats[exercise.title] || 0, order }))
-        .sort((first, second) => second.count - first.count || first.order - second.order);
+        .map((exercise, order) => ({
+          title: exercise.title,
+          level: exercise.level,
+          count: stats[exercise.title] || 0,
+          order
+        }));
       const maxCount = Math.max(1, ...rows.map(row => row.count));
       const total = rows.reduce((sum, row) => sum + row.count, 0);
 
       statsTotal.textContent = `${total} total ${total === 1 ? "rep" : "reps"}`;
-      statsList.innerHTML = rows.map(row => {
-        const percent = row.count === 0 ? 0 : Math.max(8, Math.round((row.count / maxCount) * 100));
+      statsList.innerHTML = levels.map(level => {
+        const levelRows = rows
+          .filter(row => row.level === level)
+          .sort((first, second) => second.count - first.count || first.order - second.order);
+        const levelTotal = levelRows.reduce((sum, row) => sum + row.count, 0);
+
         return `
-          <article class="stat-row">
-            <span class="stat-name">${row.title}</span>
-            <span class="stat-controls" aria-label="${row.title} completions">
-              <button class="stat-button" type="button" data-stat-action="decrease" data-stat-title="${row.title}" aria-label="Decrease ${row.title} completions" ${row.count === 0 ? "disabled" : ""}>-</button>
-              <span class="stat-count" aria-label="${row.count} completions">${row.count}</span>
-              <button class="stat-button" type="button" data-stat-action="increase" data-stat-title="${row.title}" aria-label="Increase ${row.title} completions">+</button>
-            </span>
-            <span class="stat-meter" aria-hidden="true">
-              <span class="stat-meter-fill" style="--stat-percent: ${percent}%"></span>
-            </span>
-          </article>`;
+          <section class="stat-level-group" aria-label="${level} drill statistics">
+            <div class="stat-level-head">
+              <h3 class="stat-level-title">${level}</h3>
+              <span class="stat-level-total">${levelTotal} ${levelTotal === 1 ? "rep" : "reps"}</span>
+            </div>
+            <div class="stat-level-list">
+              ${levelRows.map(row => {
+                const percent = row.count === 0 ? 0 : Math.max(8, Math.round((row.count / maxCount) * 100));
+                return `
+                  <article class="stat-row">
+                    <span class="stat-name">${row.title}</span>
+                    <span class="stat-controls" aria-label="${row.title} completions">
+                      <button class="stat-button" type="button" data-stat-action="decrease" data-stat-title="${row.title}" aria-label="Decrease ${row.title} completions" ${row.count === 0 ? "disabled" : ""}>-</button>
+                      <span class="stat-count" aria-label="${row.count} completions">${row.count}</span>
+                      <button class="stat-button" type="button" data-stat-action="increase" data-stat-title="${row.title}" aria-label="Increase ${row.title} completions">+</button>
+                    </span>
+                    <span class="stat-meter" aria-hidden="true">
+                      <span class="stat-meter-fill" style="--stat-percent: ${percent}%"></span>
+                    </span>
+                  </article>`;
+              }).join("")}
+            </div>
+          </section>`;
       }).join("");
     }
 
